@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>번호 복사</title>
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f5f5f7;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 48px 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    width: min(90vw, 380px);
+  }
+  .number {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #1d1d1f;
+    margin-bottom: 28px;
+    word-break: break-all;
+  }
+  button {
+    appearance: none;
+    border: none;
+    background: #007aff;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  button:hover {
+    background: #0066d6;
+  }
+  button:active {
+    transform: scale(0.98);
+  }
+  button.copied {
+    background: #34c759;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="number" id="number">3333345639464</div>
+    <button id="copyBtn">복사하기</button>
+  </div>
+
+  <script>
+    const numberEl = document.getElementById('number');
+    const copyBtn = document.getElementById('copyBtn');
+
+    copyBtn.addEventListener('click', async () => {
+      const text = numberEl.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = '복사됨!';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.textContent = originalText;
+        copyBtn.classList.remove('copied');
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
